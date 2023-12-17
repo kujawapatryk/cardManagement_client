@@ -31,10 +31,10 @@ const submitForm = async () => {
   try {
     let response;
     if (isEditMode.value) {
-      response = await axios.put(`${API_URL}/cards/${newCard.value.id}`, newCard.value);
+      response = await axios.put(`${API_URL}/cards/${newCard.value.id}`, newCard.value, { withCredentials: true } );
       emits('card-updated', response.data);
     } else {
-      response = await axios.post(`${API_URL}/cards`, newCard.value);
+      response = await axios.post(`${API_URL}/cards`, newCard.value, { withCredentials: true });
       emits('card-added', response.data);
     }
     newCard.value = { ...blankCard };

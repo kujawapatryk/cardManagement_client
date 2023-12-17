@@ -15,7 +15,7 @@ const cardToEdit = ref({});
 
 const fetchCards = async (page = 1) => {
   try {
-    const response = await axios.get(`${API_URL}/cards?page=${page}&limit=${itemsPerPage}`);
+    const response = await axios.get(`${API_URL}/cards?page=${page}&limit=${itemsPerPage}`, { withCredentials: true });
     cards.value = response.data.data;
     totalCards.value = response.data.total;
     currentPage.value = page;
@@ -26,7 +26,7 @@ const fetchCards = async (page = 1) => {
 
 const deleteCard = async (cardId) => {
   try {
-    await axios.delete(`${API_URL}/cards/${cardId}`);
+    await axios.delete(`${API_URL}/cards/${cardId}`,{ withCredentials: true });
     cards.value = cards.value.filter(card => card.id !== cardId);
   } catch (error) {
     console.error(error);
