@@ -3,14 +3,20 @@ import { ref, onMounted } from 'vue';
 import axios from "axios";
 import { API_URL } from "../../../config/config.js";
 import AddCard from "@/components/Card/AddCard.vue";
+import Pagination from "@/components/Pagination.vue";
 
 const cards = ref(null);
+const totalCards = ref(0);
+const currentPage = ref(1);
+const itemsPerPage = 15;
 const showForm = ref(false);
 
-const fetchCards = async () => {
+const fetchCards = async (page = 1) => {
   try {
-    const response = await axios.get(`${API_URL}/cards`);
+    const response = await axios.get(`${API_URL}/cards?page=${page}&limit=${itemsPerPage}`);
     cards.value = response.data.data;
+    totalCards.value = response.data.total;
+    currentPage.value = page;
   } catch (error) {
     console.error(error);
   }
@@ -95,6 +101,12 @@ onMounted(fetchCards);
         </tr>
         </tbody>
       </table>
+      <Pagination
+          :totalItems="totalCards"
+          :itemsPerPage="itemsPerPage"
+          :currentPage="currentPage"
+          @page-changed="fetchCards"
+      />
     </div>
   </div>
 </template>
