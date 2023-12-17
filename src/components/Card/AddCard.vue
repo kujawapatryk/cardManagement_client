@@ -18,7 +18,7 @@ const submitForm = async () => {
   try {
     const response = await axios.post(`${API_URL}/cards`, newCard.value);
     newCard.value = blankCard;
-    emits('card-added');
+    emits('card-added',response.data);
   } catch (error) {
     console.error(error);
   }

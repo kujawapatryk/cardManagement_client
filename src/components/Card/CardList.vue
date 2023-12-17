@@ -25,6 +25,11 @@ const deleteCard = async (cardId) => {
   }
 };
 
+const handleCardAdded = (newCard) => {
+  cards.value.unshift(newCard);
+  showForm.value = false;
+};
+
 onMounted(fetchCards);
 </script>
 
@@ -41,7 +46,7 @@ onMounted(fetchCards);
       >
         Dodaj Nową Kartę
       </button>
-        <AddCard v-if="showForm" @card-added="showForm = false" />
+        <AddCard v-if="showForm" @card-added="handleCardAdded" />
 
       <table class="min-w-full divide-y divide-gray-200">
         <thead class="bg-gray-50">
