@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import CardList from "@/components/Card/CardList.vue";
+
+import Nav from "@/components/Nav.vue";
 
 </script>
 
 <template>
-
-  <CardList />
+  <Nav />
+  <router-view />
 </template>
