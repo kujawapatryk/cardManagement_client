@@ -2,8 +2,10 @@
 import { ref, onMounted } from 'vue';
 import axios from "axios";
 import { API_URL } from "../../../config/config.js";
+import AddCard from "@/components/Card/AddCard.vue";
 
 const cards = ref(null);
+const showForm = ref(false);
 
 const fetchCards = async () => {
   try {
@@ -14,7 +16,6 @@ const fetchCards = async () => {
   }
 };
 
-
 onMounted(fetchCards);
 </script>
 
@@ -23,6 +24,16 @@ onMounted(fetchCards);
 <template>
   <div class="mx-auto w-full max-w-7xl mb-10">
     <div class="overflow-x-auto">
+
+      <button
+          v-if="!showForm"
+          @click="showForm = true"
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+      >
+        Dodaj Nową Kartę
+      </button>
+        <AddCard v-if="showForm" @card-added="showForm = false" />
+
       <table class="min-w-full divide-y divide-gray-200">
         <thead class="bg-gray-50">
         <tr>
