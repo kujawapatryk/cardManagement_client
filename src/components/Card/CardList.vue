@@ -16,6 +16,15 @@ const fetchCards = async () => {
   }
 };
 
+const deleteCard = async (cardId) => {
+  try {
+    await axios.delete(`${API_URL}/cards/${cardId}`);
+    cards.value = cards.value.filter(card => card.id !== cardId);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 onMounted(fetchCards);
 </script>
 
