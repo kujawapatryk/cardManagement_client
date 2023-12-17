@@ -17,7 +17,7 @@ const props = defineProps({
 
 const isEditMode = ref(false);
 const newCard = ref({ ...blankCard })
-const emits = defineEmits(['card-added', 'card-updated']);
+const emits = defineEmits(['card-added', 'card-updated', `form-closed`]);
 
 watch(() => props.editCardData, (newData) => {
 

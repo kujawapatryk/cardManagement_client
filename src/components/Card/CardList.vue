@@ -2,8 +2,8 @@
 import { ref, onMounted } from 'vue';
 import axios from "axios";
 import { API_URL } from "../../../config/config.js";
-import AddCard from "@/components/Card/AddCard.vue";
 import Pagination from "@/components/Pagination.vue";
+import CardForm from "@/components/Card/CardForm.vue";
 
 const cards = ref(null);
 const totalCards = ref(0);
@@ -70,7 +70,7 @@ onMounted(fetchCards);
           class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
       >Add New Card</button>
 
-      <AddCard v-if="isFormVisible" @form-closed="handleFormClose" :editCardData="cardToEdit" @card-added="handleCardAdded" @card-updated="handleCardUpdated" />
+      <CardForm v-if="isFormVisible" @form-closed="handleFormClose" :editCardData="cardToEdit" @card-added="handleCardAdded" @card-updated="handleCardUpdated" />
 
       <table class="min-w-full divide-y divide-gray-200">
         <thead class="bg-gray-50">
