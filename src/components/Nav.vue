@@ -15,7 +15,11 @@ const sendLogoutRequest = async () => {
       console.error('No auth token found');
       return;
     }
-    const response = await axios.post(`${API_URL}/logout`,{},{ withCredentials: true , headers: { Authorization: `Bearer ${token}` } })
+    const response = await axios.post(`${API_URL}/logout`,{},
+        {
+          withCredentials: true,
+          headers: { Authorization: `Bearer ${token}` },
+        })
     await router.push('/login');
   } catch (error) {
     console.error('Error logout: ', error.response)
