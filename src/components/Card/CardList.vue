@@ -2,7 +2,7 @@
 import { ref, onMounted } from "vue";
 import axios from "axios";
 import {API_URL} from "@/config/config";
-import Pagination from "@/components/Pagination.vue";
+import Pagination from "@/components/SitePagination.vue";
 import CardForm from "@/components/Card/CardForm.vue";
 import {getToken} from "@/composables/getToken";
 
