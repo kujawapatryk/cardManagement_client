@@ -1,9 +1,10 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import axios from "axios";
-import { API_URL } from "../../../config/config.js";
+import {API_URL} from "../../../config/config.js";
 import Pagination from "@/components/Pagination.vue";
 import CardForm from "@/components/Card/CardForm.vue";
+import {getToken} from "@/composables/getToken";
 
 const cards = ref(null);
 const totalCards = ref(0);
@@ -15,7 +16,11 @@ const cardToEdit = ref({});
 
 const fetchCards = async (page = 1) => {
   try {
-    const response = await axios.get(`${API_URL}/cards?page=${page}&limit=${itemsPerPage}`, { withCredentials: true });
+    const response = await axios.get(`${API_URL}/cards?page=${page}&limit=${itemsPerPage}`,
+        {
+          withCredentials: true,
+          headers: { Authorization: `Bearer ${getToken()}` }
+        } );
     cards.value = response.data.data;
     totalCards.value = response.data.total;
     currentPage.value = page;
@@ -26,7 +31,11 @@ const fetchCards = async (page = 1) => {
 
 const deleteCard = async (cardId) => {
   try {
-    await axios.delete(`${API_URL}/cards/${cardId}`,{ withCredentials: true });
+    await axios.delete(`${API_URL}/cards/${cardId}`,
+        {
+          withCredentials: true,
+          headers: { Authorization: `Bearer ${getToken()}` }
+        } );
     cards.value = cards.value.filter(card => card.id !== cardId);
   } catch (error) {
     console.error(error);

@@ -1,8 +1,9 @@
-<script setup lang="ts">
+<script setup >
 
 import {ref, watch} from "vue";
 import axios from "axios";
-import {API_URL} from "../../../config/config";
+import {API_URL} from "../../../config/config.js";
+import {getToken} from "@/composables/getToken";
 
 const blankCard = {
   card_number: '',
@@ -29,12 +30,14 @@ watch(() => props.editCardData, (newData) => {
 
 const submitForm = async () => {
   try {
+    const token = getToken();
     let response;
     if (isEditMode.value) {
-      response = await axios.put(`${API_URL}/cards/${newCard.value.id}`, newCard.value, { withCredentials: true } );
+      response = await axios.put(`${API_URL}/cards/${newCard.value.id}`, newCard.value, { withCredentials: true , headers: { Authorization: `Bearer ${token}` } } );
       emits('card-updated', response.data);
+
     } else {
-      response = await axios.post(`${API_URL}/cards`, newCard.value, { withCredentials: true });
+      response = await axios.post(`${API_URL}/cards`, newCard.value, { withCredentials: true , headers: { Authorization: `Bearer ${token}` } });
       emits('card-added', response.data);
     }
     newCard.value = { ...blankCard };
