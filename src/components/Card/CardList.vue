@@ -1,12 +1,13 @@
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted } from "vue";
 import axios from "axios";
 import {API_URL} from "@/config/config";
 import Pagination from "@/components/SitePagination.vue";
-import CardForm from "@/components/Card/CardForm.vue";
+import CardForm from "./CardForm.vue";
 import {getToken} from "@/composables/getToken";
+import type {CardEntity} from "@/types";
 
-const cards = ref(null);
+const cards = ref<CardEntity[]>();
 const totalCards = ref(0);
 const currentPage = ref(1);
 const itemsPerPage = 15;
@@ -21,38 +22,43 @@ const fetchCards = async (page = 1) => {
           withCredentials: true,
           headers: { Authorization: `Bearer ${getToken()}` }
         } );
-    cards.value = response.data.data;
-    totalCards.value = response.data.total;
-    currentPage.value = page;
+    if (response.status === 200) {
+      cards.value = response.data.data;
+      totalCards.value = response.data.total;
+      currentPage.value = page;
+    }
+
   } catch (error) {
     console.error(error);
   }
 };
 
-const deleteCard = async (cardId) => {
+const deleteCard = async (cardId: number) => {
   try {
     await axios.delete(`${API_URL}/cards/${cardId}`,
         {
           withCredentials: true,
           headers: { Authorization: `Bearer ${getToken()}` }
         } );
-    cards.value = cards.value.filter(card => card.id !== cardId);
+      cards.value = cards.value?.filter(card => card.id !== cardId);
   } catch (error) {
     console.error(error);
   }
 };
 
-const handleCardAdded = (newCard) => {
-  cards.value.unshift(newCard);
-  handleFormClose();
+const handleCardAdded = (newCard:CardEntity) => {
+    cards.value?.unshift(newCard);
+    handleFormClose();
 };
 
-const handleCardUpdated = (updatedCard) => {
-  const index = cards.value.findIndex(card => card.id === updatedCard.id);
-  if (index !== -1) {
-    cards.value[index] = updatedCard;
+const handleCardUpdated = (updatedCard: CardEntity) => {
+  if(cards.value) {
+    const index = cards.value.findIndex(card => card.id === updatedCard.id);
+    if (index !== -1) {
+      cards.value[index] = updatedCard;
+    }
+    handleFormClose();
   }
-  handleFormClose();
 };
 
 const showForm = (card = {}) => {
@@ -123,7 +129,6 @@ onMounted(fetchCards);
           </td>
           <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
             <button class="text-indigo-600 hover:text-indigo-900" @click="showForm(card)">Edit</button>
-<!--            <button class="text-indigo-600 hover:text-indigo-900" @click="editCard(card)">Edit</button>-->
             <button class="text-red-600 hover:text-red-900 ml-4" @click="deleteCard(card.id)">Delete</button>
           </td>
         </tr>
