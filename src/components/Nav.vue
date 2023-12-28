@@ -1,7 +1,7 @@
 <script setup >
 
 import axios from "axios";
-import {API_URL} from "../../config/config";
+import {API_URL} from "@/config/config";
 import router from "@/router";
 import {getToken} from "@/composables/getToken";
 import {ref, watchEffect} from "vue";

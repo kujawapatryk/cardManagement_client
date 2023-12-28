@@ -1,7 +1,7 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted } from "vue";
 import axios from "axios";
-import {API_URL} from "../../../config/config.js";
+import {API_URL} from "@/config/config";
 import Pagination from "@/components/Pagination.vue";
 import CardForm from "@/components/Card/CardForm.vue";
 import {getToken} from "@/composables/getToken";

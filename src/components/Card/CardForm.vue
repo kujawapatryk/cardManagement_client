@@ -2,7 +2,7 @@
 
 import {ref, watch} from "vue";
 import axios from "axios";
-import {API_URL} from "../../../config/config.js";
+import {API_URL} from "@/config/config";
 import {getToken} from "@/composables/getToken";
 
 const blankCard = {

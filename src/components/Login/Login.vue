@@ -1,7 +1,7 @@
 <script setup>
 import axios from 'axios';
 import {ref} from 'vue';
-import {API_URL} from "../../../config/config.js";
+import {API_URL} from "@/config/config.ts";
 import {getToken} from "@/composables/getToken";
 import router from "@/router";
 
