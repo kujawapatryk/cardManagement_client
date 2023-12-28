@@ -1,15 +1,16 @@
-<script setup >
+<script setup lang="ts" >
 
 import {ref, watch} from "vue";
 import axios from "axios";
-import {API_URL} from "../../../config/config.js";
+import {API_URL} from "@/config/config";
 import {getToken} from "@/composables/getToken";
+import type {NewCard} from "@/types";
 
-const blankCard = {
+const blankCard:NewCard = {
   card_number: '',
   pin: '',
   expiry_date: '',
-  balance: 0,
+  balance: '0',
 }
 
 const props = defineProps({
@@ -17,13 +18,13 @@ const props = defineProps({
 });
 
 const isEditMode = ref(false);
-const newCard = ref({ ...blankCard })
+const newCard = ref<NewCard>({ ...blankCard })
 const emits = defineEmits(['card-added', 'card-updated', `form-closed`]);
 
 watch(() => props.editCardData, (newData) => {
 
   if (props.editCardData && props.editCardData.card_number) {
-    newCard.value = { ...newData };
+    newCard.value  = { ...newData } as NewCard;
     isEditMode.value = true;
   }
 }, { immediate: true });
