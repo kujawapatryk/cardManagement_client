@@ -1,21 +1,24 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import {ref, onMounted, watch} from "vue";
 import axios from "axios";
 import {API_URL} from "@/config/config";
-import Pagination from "@/components/SitePagination.vue";
 import CardForm from "./CardForm.vue";
 import {getToken} from "@/composables/getToken";
 import type {CardEntity} from "@/types";
+import router from "@/router";
+import SitePagination from "@/components/SitePagination.vue";
 
 const cards = ref<CardEntity[]>();
 const totalCards = ref(0);
 const currentPage = ref(1);
-const itemsPerPage = 15;
+const itemsPerPage = 2;
 
 const isFormVisible = ref(false);
 const cardToEdit = ref({});
 
-const fetchCards = async (page = 1) => {
+const fetchCards = async () => {
+
+  const page = Number(router.currentRoute.value.query.page) || 1;
   try {
     const response = await axios.get(`${API_URL}/cards?page=${page}&limit=${itemsPerPage}`,
         {
@@ -71,6 +74,10 @@ const handleFormClose = () => {
 };
 
 onMounted(fetchCards);
+
+watch(() => router.currentRoute.value.query.page, () => {
+  fetchCards();
+});
 </script>
 
 
@@ -134,11 +141,10 @@ onMounted(fetchCards);
         </tr>
         </tbody>
       </table>
-      <Pagination
+      <SitePagination
           :totalItems="totalCards"
           :itemsPerPage="itemsPerPage"
           :currentPage="currentPage"
-          @page-changed="fetchCards"
       />
     </div>
   </div>
