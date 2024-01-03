@@ -1,23 +1,30 @@
 <script setup lang="ts">
 
 import { defineProps, computed } from 'vue';
+import router from "@/router";
 
 const props = defineProps({
-  totalItems: Number,
-  itemsPerPage: Number,
-  currentPage: Number
+  totalItems: {
+    type: Number,
+    default: 0
+  },
+  itemsPerPage: {
+    type: Number,
+    default: 10
+  },
+  currentPage: {
+    type: Number,
+    default: 1
+  },
 });
-
-const emit = defineEmits(['page-changed']);
 
 const totalPages = computed(() => {
-  return Math.ceil(props.totalItems / props.itemsPerPage);
+  return Math.ceil(props.totalItems / props.itemsPerPage );
 });
 
-const changePage = (page:number) => {
-  emit('page-changed', page);
+const changePage = (page: number) => {
+  router.push({ query: { ...router.currentRoute.value.query, page: page.toString() } });
 };
-
 </script>
 
 

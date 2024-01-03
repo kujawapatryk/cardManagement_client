@@ -1,14 +1,15 @@
-<script setup lang="ts">
+<script setup lang="ts" >
 
-import {ref, watch} from "vue";
-import axios from "axios";
-import {API_URL} from "../../../config/config";
+import {onMounted, ref, watch} from "vue";
+import type {NewCard} from "@/types";
+import {getCSRF} from "@/composables/getCSRF";
+import {apiRequest} from "@/composables/apiRequest";
 
-const blankCard = {
+const blankCard:NewCard = {
   card_number: '',
   pin: '',
   expiry_date: '',
-  balance: 0,
+  balance: '0',
 }
 
 const props = defineProps({
@@ -16,13 +17,13 @@ const props = defineProps({
 });
 
 const isEditMode = ref(false);
-const newCard = ref({ ...blankCard })
+const newCard = ref<NewCard>({ ...blankCard })
 const emits = defineEmits(['card-added', 'card-updated', `form-closed`]);
 
 watch(() => props.editCardData, (newData) => {
 
   if (props.editCardData && props.editCardData.card_number) {
-    newCard.value = { ...newData };
+    newCard.value  = { ...newData } as NewCard;
     isEditMode.value = true;
   }
 }, { immediate: true });
@@ -31,10 +32,13 @@ const submitForm = async () => {
   try {
     let response;
     if (isEditMode.value) {
-      response = await axios.put(`${API_URL}/cards/${newCard.value.id}`, newCard.value, { withCredentials: true } );
+
+      response = await apiRequest(`cards/${newCard.value.id}`,'put',null, newCard.value,true, true);
       emits('card-updated', response.data);
+
     } else {
-      response = await axios.post(`${API_URL}/cards`, newCard.value, { withCredentials: true });
+
+     response = await apiRequest(`cards`,'post',null, newCard.value,true, true);
       emits('card-added', response.data);
     }
     newCard.value = { ...blankCard };
@@ -46,6 +50,10 @@ const submitForm = async () => {
 const cancelForm = () => {
   emits('form-closed');
 };
+
+onMounted(async () => {
+  await getCSRF();
+})
 </script>
 
 <template>
@@ -87,7 +95,7 @@ const cancelForm = () => {
           <label class="block text-gray-700 text-sm font-bold mb-2" for="balance">
             Balance
           </label>
-          <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" type="number" id="balance" v-model="newCard.balance" required>
+          <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" type="number" step="0.01" id="balance" v-model="newCard.balance" required>
         </div>
           <div class="flex items-center justify-between">
             <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">

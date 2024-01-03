@@ -1,3 +1,33 @@
+<script setup lang="ts">
+import {ref} from 'vue';
+import router from "@/router";
+import {apiRequest} from "@/composables/apiRequest.js";
+
+const credentials = ref({
+  email: '',
+  password: ''
+});
+
+const login = async (email:string, password:string) => {
+  try {
+    const response = await apiRequest('login', 'POST', null, {email, password},false,true);
+    localStorage.setItem("authToken", response.data.token);
+    await fetchUser();
+    await router.push('/');
+  } catch (error) {
+    console.error('Login error: ', error);
+  }
+};
+
+const fetchUser = async () => {
+  try {
+    const response = apiRequest('user', 'get', null, null, true, false);
+  } catch (error) {
+    console.error('Error fetching user data: ', error);
+  }
+};
+</script>
+
 <template>
   <div class="flex justify-center items-center h-screen bg-gray-100">
     <div class="max-w-sm w-full bg-white rounded-lg shadow-md p-8">
@@ -23,35 +53,3 @@
   </div>
 </template>
 
-<script setup>
-import axios from 'axios';
-import {ref} from 'vue';
-import {API_URL} from "../../../config/config.js";
-
-const credentials = ref({
-  email: '',
-  password: ''
-});
-
-const login = async (email, password) => {
-  try {
-   const test =  await axios.get(`http://127.0.0.1:8000/sanctum/csrf-cookie`, { withCredentials: true } );
-    console.log(test);
-     const response = await axios.post(`http://127.0.0.1:8000//login`, {email, password}, { withCredentials: true });
-
-    console.log('Zalogowano: ', response);
-  } catch (error) {
-    console.error('Login error: ', error.response);
-  }
-};
-
-const fetchUser = async () => {
-  try {
-    const response = await axios.get(`${API_URL}/user`);
-    console.log('User data: ', response.data);
-
-  } catch (error) {
-    console.error('Error fetching user data: ', error.response);
-  }
-};
-</script>
