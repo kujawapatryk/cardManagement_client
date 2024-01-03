@@ -1,33 +1,29 @@
-<script setup>
-import axios from 'axios';
+<script setup lang="ts">
 import {ref} from 'vue';
-import {API_URL} from "@/config/config.ts";
-import {getToken} from "@/composables/getToken";
 import router from "@/router";
+import {apiRequest} from "@/composables/apiRequest.js";
 
 const credentials = ref({
   email: '',
   password: ''
 });
 
-const login = async (email, password) => {
+const login = async (email:string, password:string) => {
   try {
-    const response = await axios.post(`${API_URL}/login`, {email, password}, { withCredentials: true });
+    const response = await apiRequest('login', 'POST', null, {email, password},false,true);
     localStorage.setItem("authToken", response.data.token);
     await fetchUser();
     await router.push('/');
   } catch (error) {
-    console.error('Login error: ', error.response);
+    console.error('Login error: ', error);
   }
 };
 
 const fetchUser = async () => {
   try {
-    const response = await axios.get(`${API_URL}/user`,{ withCredentials: true , headers: { Authorization: `Bearer ${getToken()}` } });
-    console.log('User data: ', response.data);
-
+    const response = apiRequest('user', 'get', null, null, true, false);
   } catch (error) {
-    console.error('Error fetching user data: ', error.response);
+    console.error('Error fetching user data: ', error);
   }
 };
 </script>

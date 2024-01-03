@@ -1,10 +1,8 @@
 <script setup lang="ts" >
-
-import axios from "axios";
-import {API_URL} from "@/config/config";
 import router from "@/router";
 import {getToken} from "@/composables/getToken";
 import {ref, watchEffect} from "vue";
+import {apiRequest} from "@/composables/apiRequest";
 
 const isLoggedIn = ref(false);
 
@@ -15,11 +13,7 @@ const sendLogoutRequest = async () => {
       console.error('No auth token found');
       return;
     }
-    await axios.post(`${API_URL}/logout`,{},
-        {
-          withCredentials: true,
-          headers: { Authorization: `Bearer ${token}` },
-        })
+    await apiRequest('logout', 'post')
     await router.push('/login');
   } catch (error) {
     console.error('Error logout: ', error)

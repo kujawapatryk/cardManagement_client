@@ -1,27 +1,30 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
-import axios from "axios";
-import {API_URL} from "@/config/config";
-import Pagination from "@/components/SitePagination.vue";
+import {ref, onMounted, watch} from "vue";
 import CardForm from "./CardForm.vue";
-import {getToken} from "@/composables/getToken";
+import router from "@/router";
+import SitePagination from "@/components/SitePagination.vue";
+import {apiRequest} from "@/composables/apiRequest";
+
 import type {CardEntity} from "@/types";
 
 const cards = ref<CardEntity[]>();
 const totalCards = ref(0);
 const currentPage = ref(1);
-const itemsPerPage = 15;
+const itemsPerPage = 2;
 
 const isFormVisible = ref(false);
 const cardToEdit = ref({});
 
-const fetchCards = async (page = 1) => {
+const fetchCards = async () => {
+
+  const page = Number(router.currentRoute.value.query.page) || 1;
   try {
-    const response = await axios.get(`${API_URL}/cards?page=${page}&limit=${itemsPerPage}`,
-        {
-          withCredentials: true,
-          headers: { Authorization: `Bearer ${getToken()}` }
-        } );
+    const params = {
+      page,
+      limit: itemsPerPage,
+    }
+    const response = await apiRequest('cards','get',params,null,true,false);
+
     if (response.status === 200) {
       cards.value = response.data.data;
       totalCards.value = response.data.total;
@@ -35,11 +38,7 @@ const fetchCards = async (page = 1) => {
 
 const deleteCard = async (cardId: number) => {
   try {
-    await axios.delete(`${API_URL}/cards/${cardId}`,
-        {
-          withCredentials: true,
-          headers: { Authorization: `Bearer ${getToken()}` }
-        } );
+     await apiRequest(`cards/${cardId}`,'delete', null,null,true,true);
       cards.value = cards.value?.filter(card => card.id !== cardId);
   } catch (error) {
     console.error(error);
@@ -71,6 +70,10 @@ const handleFormClose = () => {
 };
 
 onMounted(fetchCards);
+
+watch(() => router.currentRoute.value.query.page, () => {
+  fetchCards();
+});
 </script>
 
 
@@ -134,11 +137,10 @@ onMounted(fetchCards);
         </tr>
         </tbody>
       </table>
-      <Pagination
+      <SitePagination
           :totalItems="totalCards"
           :itemsPerPage="itemsPerPage"
           :currentPage="currentPage"
-          @page-changed="fetchCards"
       />
     </div>
   </div>
