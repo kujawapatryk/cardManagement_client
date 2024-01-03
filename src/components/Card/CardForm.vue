@@ -1,10 +1,9 @@
 <script setup lang="ts" >
 
-import {ref, watch} from "vue";
-import axios from "axios";
-import {API_URL} from "@/config/config";
-import {getToken} from "@/composables/getToken";
+import {onMounted, ref, watch} from "vue";
 import type {NewCard} from "@/types";
+import {getCSRF} from "@/composables/getCSRF";
+import {apiRequest} from "@/composables/apiRequest";
 
 const blankCard:NewCard = {
   card_number: '',
@@ -31,14 +30,15 @@ watch(() => props.editCardData, (newData) => {
 
 const submitForm = async () => {
   try {
-    const token = getToken();
     let response;
     if (isEditMode.value) {
-      response = await axios.put(`${API_URL}/cards/${newCard.value.id}`, newCard.value, { withCredentials: true , headers: { Authorization: `Bearer ${token}` } } );
+
+      response = await apiRequest(`cards/${newCard.value.id}`,'put',null, newCard.value,true, true);
       emits('card-updated', response.data);
 
     } else {
-      response = await axios.post(`${API_URL}/cards`, newCard.value, { withCredentials: true , headers: { Authorization: `Bearer ${token}` } });
+
+     response = await apiRequest(`cards`,'post',null, newCard.value,true, true);
       emits('card-added', response.data);
     }
     newCard.value = { ...blankCard };
@@ -50,6 +50,10 @@ const submitForm = async () => {
 const cancelForm = () => {
   emits('form-closed');
 };
+
+onMounted(async () => {
+  await getCSRF();
+})
 </script>
 
 <template>
