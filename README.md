@@ -1,68 +1,31 @@
-# cardManagement_client
+# CardManagement
 
-This template should help get you started developing with Vue 3 in Vite.
+## Description
+A simple CRUD application for managing cards, consisting of two separate parts: a frontend and a backend that communicate with each other via API. The frontend is written in Vue.js, while the backend uses PHP with the Laravel framework. The application integrates with a MySQL database, ensuring efficient handling of card data.
 
-## Recommended IDE Setup
+## Architecture
+- **Frontend (Vue.js)**: User interface that facilitates interaction with card data.
+- **Backend (PHP/Laravel)**: Manages application logic, CRUD operations, and database communication.
+- **API Communication**: Separate frontend and backend applications communicate through a designed API.
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+## Features
+- **CRUD for Cards**: Create, read, update, and delete card data.
+- **User Authentication**: Access to card operations after logging in.
+- **Data Validation**: Verification of the correctness of the entered card data.
+- **Pagination**: Card list with pagination for better navigation.
 
-## Type Support for `.vue` Imports in TS
+## Technologies
+- **Frontend**: Vue.js
+- **Backend**: PHP (Laravel)
+- **Database**: MySQL
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
+## Demo
+You can test the application using the demo version, available here: [Demo CardManagement](https://card.heyweb.pl/)
 
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
+### Demo Login Credentials
+- **Username**: test@test.pl
+- **Password**: test1234
 
-1. Disable the built-in TypeScript Extension
-    1) Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-    2) Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Type-Check, Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Run Unit Tests with [Vitest](https://vitest.dev/)
-
-```sh
-npm run test:unit
-```
-
-### Run End-to-End Tests with [Cypress](https://www.cypress.io/)
-
-```sh
-npm run test:e2e:dev
-```
-
-This runs the end-to-end tests against the Vite development server.
-It is much faster than the production build.
-
-But it's still recommended to test the production build with `test:e2e` before deploying (e.g. in CI environments):
-
-```sh
-npm run build
-npm run test:e2e
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
+## Repositories
+- **Backend**: [cardManagement BE](https://github.com/kujawapatryk/cardManagement)
+- **Frontend**: [cardManagement FE](https://github.com/kujawapatryk/cardManagement_client)
